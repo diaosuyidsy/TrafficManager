@@ -5,17 +5,7 @@ using UnityEngine;
 public class StepControl : MonoBehaviour
 {
 	public bool canLockPlayer = false;
-	// Use this for initialization
-	void Start ()
-	{
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-		
-	}
+	public GameObject stepTouch;
 
 	public void LockDown (bool locked)
 	{
@@ -29,8 +19,9 @@ public class StepControl : MonoBehaviour
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		if (other.gameObject.tag == "Player" && GetComponentInParent<RoadControl> ().getStepColor () == 1 && canLockPlayer) {
+		if (other.gameObject.tag == "Player" && stepTouch.GetComponent <StepTouch> ().getStepColor () == 1 && canLockPlayer) {
 			other.gameObject.GetComponent<PlayerControl> ().lockMove = true;
+			other.gameObject.GetComponent<PlayerControl> ().startMoving = false;
 		}
 	}
 }

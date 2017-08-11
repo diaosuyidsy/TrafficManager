@@ -4,46 +4,22 @@ using UnityEngine;
 
 public class RoadControl : MonoBehaviour
 {
-	public GameObject[] Steps;
-
 	//0 is white, 1 is red
 	private int stepColor = 0;
-	private int lastStepColor = 0;
-	// Use this for initialization
-	void Start ()
-	{
-		Steps [2].GetComponent<StepControl> ().canLockPlayer = true;
-	}
-
-	void OnMouseDown ()
-	{
-		if ((stepColor + 1) % 2 != lastStepColor && !GameManager.GM.canChange ()) {
-			return;
-		}
-		foreach (GameObject step in Steps) {
-			if (stepColor == 0) {
-				step.GetComponent<SpriteRenderer> ().color = Color.red;
-			} else {
-				step.GetComponent<SpriteRenderer> ().color = Color.white;
-			}
-		}
-		LockDown ();
-		stepColor = (stepColor + 1) % 2;
-		if (stepColor == lastStepColor) {
-			GameManager.GM.changeChanged (true);
-		} else {
-			GameManager.GM.changeChanged (false);
-		}
-	}
+	private Color startColor;
 
 	public void step ()
 	{
-		lastStepColor = stepColor;
+		foreach (Transform child in transform) {
+			child.GetChild (0).SendMessage ("step");
+		}
 	}
 
-	public void LockDown ()
+	public void unstep ()
 	{
-		Steps [2].gameObject.SendMessage ("LockDown", stepColor == 0);
+		foreach (Transform child in transform) {
+			child.GetChild (0).SendMessage ("unstep");
+		}
 	}
 
 	public int getStepColor ()
